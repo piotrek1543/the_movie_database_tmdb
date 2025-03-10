@@ -86,6 +86,12 @@ dependencies {
     ksp(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation)
 
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.mockwebserver)
+    implementation(libs.okhttp.interceptor)
+
     androidTestImplementation(libs.dagger.hilt.testing)
     kspAndroidTest(libs.dagger.hilt.compiler)
     kspAndroidTest(libs.androidx.hilt.compiler)
