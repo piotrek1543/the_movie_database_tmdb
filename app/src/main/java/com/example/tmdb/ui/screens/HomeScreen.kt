@@ -17,13 +17,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tmdb.R
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.tmdb.ui.theme.TMDBTheme
 import com.example.tmdb.MoviesUiState
+import com.example.tmdb.data.Constants
 import com.example.tmdb.data.model.Results
 
 @Composable
@@ -89,13 +94,32 @@ fun ResultsScreen(
         contentPadding = contentPadding,
     ) {
         items(items = results, key = { result -> result.id }) { result ->
-            Text(
-                text = result.toString(),
-                modifier = modifier.padding(all = 16.dp),
-            )
-            HorizontalDivider()
+            Column {
+                val imagePath = Constants.IMAGE_URL + result.backdropPath
+                MovieImage(imagePath)
+                Text(
+                    text = result.toString(),
+                    modifier = modifier.padding(all = 16.dp),
+                )
+                HorizontalDivider()
+            }
         }
     }
+}
+
+@Composable
+private fun MovieImage(imagePath: String) {
+    AsyncImage(
+        model = ImageRequest.Builder(context = LocalContext.current)
+            .data(imagePath)
+            .crossfade(true)
+            .build(),
+        error = painterResource(R.drawable.ic_broken_image),
+        placeholder = painterResource(R.drawable.loading_img),
+        contentDescription = stringResource(R.string.loading),
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.fillMaxWidth()
+    )
 }
 
 @Preview(showBackground = true)

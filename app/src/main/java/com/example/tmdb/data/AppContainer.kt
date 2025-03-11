@@ -19,7 +19,6 @@ interface AppContainer {
  * Variables are initialized lazily and the same instance is shared across the whole app.
  */
 class DefaultAppContainer : AppContainer {
-    private val baseUrl = "https://api.themoviedb.org/3/"
 
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -31,7 +30,7 @@ class DefaultAppContainer : AppContainer {
     private val retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .client(okHttpClient)
-        .baseUrl(baseUrl)
+        .baseUrl(Constants.BASE_URL)
         .build()
 
     /**
