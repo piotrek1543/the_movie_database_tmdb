@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -91,11 +92,11 @@ fun ResultsScreen(
 ) {
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Fixed(1),
+        columns = GridCells.Fixed(integerResource(R.integer.movie_list_grid_size)),
         contentPadding = contentPadding,
     ) {
         items(items = results, key = { result -> result.id }) { result ->
-            // TODO: Update a grid with moview covers
+            MovieImage(result.posterPath)
         }
     }
 }
@@ -153,7 +154,7 @@ private fun Description(stringResource: String, title: String?) {
 }
 
 @Composable
-private fun MovieImage(imagePath: String?) {
+private fun MovieImage(imagePath: String? = null) {
     val fullPath = Constants.IMAGE_URL + imagePath
     AsyncImage(
         model = ImageRequest.Builder(context = LocalContext.current)
