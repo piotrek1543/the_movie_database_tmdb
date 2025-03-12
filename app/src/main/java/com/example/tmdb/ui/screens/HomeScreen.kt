@@ -1,5 +1,6 @@
 package com.example.tmdb.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -89,50 +90,60 @@ fun ResultsScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     LazyVerticalGrid(
+        modifier = modifier,
         columns = GridCells.Fixed(1),
         contentPadding = contentPadding,
     ) {
         items(items = results, key = { result -> result.id }) { result ->
-            Column {
-                val imagePath = Constants.IMAGE_URL + result.backdropPath
-                MovieImage(imagePath)
-                Column(
-                    modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
-                ) {
-                    Description(
-                        stringResource = stringResource(R.string.description_title),
-                        result.title,
-                    )
-                    Description(
-                        stringResource(R.string.description_original_title),
-                        result.originalTitle,
-                    )
-                    Description(
-                        stringResource(R.string.description_overview),
-                        result.overview,
-                    )
-                    Description(
-                        stringResource(R.string.description_release_date),
-                        result.releaseDate,
-                    )
-                    Description(
-                        stringResource(R.string.description_original_language),
-                        result.originalLanguage,
-                    )
-                    Description(
-                        stringResource(R.string.description_popularity),
-                        result.popularity.toString(),
-                    )
-                    Description(
-                        stringResource(R.string.description_vote_average),
-                        result.voteAverage.toString(),
-                    )
-                    Description(
-                        stringResource(R.string.description_vote_count),
-                        result.voteCount.toString(),
-                    )
-                }
-            }
+            // TODO: Update a grid with moview covers
+        }
+    }
+}
+
+@Suppress("unused")
+@Composable
+private fun MovieDetailsScreen(
+    result: Results,
+    modifier: Modifier
+) {
+    Column {
+        val imagePath = Constants.IMAGE_URL + result.backdropPath
+        MovieImage(imagePath)
+        Column(
+            modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+        ) {
+            Description(
+                stringResource = stringResource(R.string.description_title),
+                result.title,
+            )
+            Description(
+                stringResource(R.string.description_original_title),
+                result.originalTitle,
+            )
+            Description(
+                stringResource(R.string.description_overview),
+                result.overview,
+            )
+            Description(
+                stringResource(R.string.description_release_date),
+                result.releaseDate,
+            )
+            Description(
+                stringResource(R.string.description_original_language),
+                result.originalLanguage,
+            )
+            Description(
+                stringResource(R.string.description_popularity),
+                result.popularity.toString(),
+            )
+            Description(
+                stringResource(R.string.description_vote_average),
+                result.voteAverage.toString(),
+            )
+            Description(
+                stringResource(R.string.description_vote_count),
+                result.voteCount.toString(),
+            )
         }
     }
 }
