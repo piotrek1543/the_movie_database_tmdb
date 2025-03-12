@@ -107,8 +107,7 @@ private fun MovieDetailsScreen(
     modifier: Modifier
 ) {
     Column {
-        val imagePath = Constants.IMAGE_URL + result.backdropPath
-        MovieImage(imagePath)
+        MovieImage(result.backdropPath)
         Column(
             modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
@@ -154,10 +153,11 @@ private fun Description(stringResource: String, title: String?) {
 }
 
 @Composable
-private fun MovieImage(imagePath: String) {
+private fun MovieImage(imagePath: String?) {
+    val fullPath = Constants.IMAGE_URL + imagePath
     AsyncImage(
         model = ImageRequest.Builder(context = LocalContext.current)
-            .data(imagePath)
+            .data(fullPath)
             .crossfade(true)
             .build(),
         error = painterResource(R.drawable.ic_broken_image),
