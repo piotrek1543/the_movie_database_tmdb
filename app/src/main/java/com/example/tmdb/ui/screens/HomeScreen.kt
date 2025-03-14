@@ -30,7 +30,7 @@ import coil.request.ImageRequest
 import com.example.tmdb.MoviesViewModel
 import com.example.tmdb.ui.theme.TMDBTheme
 import com.example.tmdb.data.Constants
-import com.example.tmdb.data.api.model.Results
+import com.example.tmdb.data.api.model.MovieResult
 import com.example.tmdb.domain.model.NowPlayingMovie
 
 @Composable
@@ -105,7 +105,7 @@ fun ResultsScreen(
 @Suppress("unused")
 @Composable
 private fun MovieDetailsScreen(
-    result: Results,
+    result: MovieResult,
     modifier: Modifier
 ) {
     Column {

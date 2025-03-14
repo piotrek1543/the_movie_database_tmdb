@@ -1,10 +1,10 @@
 package com.example.tmdb.data.mapper
 
-import com.example.tmdb.data.api.model.Results
+import com.example.tmdb.data.api.model.MovieResult
 import com.example.tmdb.domain.model.NowPlayingMovie
 
 
-fun Results.mapToDomain(): NowPlayingMovie = NowPlayingMovie(
+fun MovieResult.mapToDomain(): NowPlayingMovie = NowPlayingMovie(
     voteCount = voteCount,
     id = id,
     video = video,

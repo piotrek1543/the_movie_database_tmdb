@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Dates(
+data class DateRange(
     val maximum: String? = null,
     val minimum: String? = null,
 ) : Parcelable

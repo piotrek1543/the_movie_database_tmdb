@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Results(
+data class MovieResult(
     @SerializedName("vote_count")
     val voteCount: Int? = null,
     val id: Int,

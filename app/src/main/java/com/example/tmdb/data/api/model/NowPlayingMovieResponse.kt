@@ -6,11 +6,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class NowPlayingMovieResponse(
-    val results: List<Results>? = null,
-    val page: Int? = null,
+    val results: List<MovieResult> = emptyList(),
+    val page: Int = 1,
     @SerializedName("total_results")
-    val totalResults: Int? = null,
-    val dates: Dates? = null,
+    val totalResults: Int = 0,
+    val dates: DateRange? = null,
     @SerializedName("total_pages")
-    val totalPages: Int? = null,
-): Parcelable
+    val totalPages: Int = 1,
+) : Parcelable
