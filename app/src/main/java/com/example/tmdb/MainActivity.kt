@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 HomeScreen(
                     uiState = moviesUiState,
-                    retryAction = moviesViewModel::fetchMovies,
+                    retryAction = moviesViewModel::loadNowPlayingMovies,
                     contentPadding = it
                 )
             }

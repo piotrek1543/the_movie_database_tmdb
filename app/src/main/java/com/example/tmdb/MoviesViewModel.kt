@@ -8,11 +8,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
+import com.example.tmdb.util.Result
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
@@ -33,30 +35,35 @@ class MoviesViewModel @Inject constructor(
      * Initialize the view model by fetching movies immediately.
      */
     init {
-        fetchMovies()
+        loadNowPlayingMovies()
     }
 
     /**
      * Fetches movies information from the Movies API and updates the UI state.
      */
-    fun fetchMovies() {
+    fun loadNowPlayingMovies() {
         viewModelScope.launch {
-            _moviesUiState.update { MoviesUiState.Loading }
-            _moviesUiState.update {
-                try {
-                    val movies = getNowPlayingMoviesUseCase()
-                    MoviesUiState.Success(movies)
-                } catch (e: IOException) {
-                    MoviesUiState.Error(e.message ?: "Network error")
-                } catch (e: HttpException) {
-                    MoviesUiState.Error(e.message ?: "HTTP error")
-                } catch (e: Exception) {
-                    MoviesUiState.Error(e.message ?: "Unknown error")
+
+            getNowPlayingMoviesUseCase().collectLatest { result ->
+                when (result) {
+                    is Result.Loading -> {
+                        _moviesUiState.update { MoviesUiState.Loading }
+                    }
+                    is Result.Success -> {
+                        _moviesUiState.update { MoviesUiState.Success(result.data) }
+                    }
+                    is Result.Error -> {
+                        val errorMessage = when (result.throwable) {
+                            is IOException -> "Failed to connect to the network. Please check your connection."
+                            is HttpException -> "Failed to fetch data from the server. HTTP error ${result.throwable.code()}"
+                            else -> "An unexpected error occurred. Please try again later."
+                        }
+                        _moviesUiState.update { MoviesUiState.Error(errorMessage) }
+                    }
                 }
             }
         }
     }
-
     /**
      * UI state for the Movies screen.
      */
