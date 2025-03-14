@@ -1,18 +1,38 @@
 package com.example.tmdb.domain.model
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+
 data class NowPlayingMovie(
-    val voteCount: Int? = null,
+    val voteCount: Int,
     val id: Int,
-    val video: Boolean? = null,
-    val voteAverage: Float? = null,
-    val title: String? = null,
-    val popularity: Float? = null,
-    val posterPath: String? = null,
-    val originalLanguage: String? = null,
-    val originalTitle: String? = null,
-    val genreIds: List<Int>? = null,
-    val backdropPath: String? = null,
-    val adult: Boolean? = null,
-    val overview: String? = null,
-    val releaseDate: String? = null,
-)
+    val hasVideo: Boolean,
+    val voteAverage: Double,
+    val title: String,
+    val popularity: Double,
+    val posterPath: String?,
+    val originalLanguage: String,
+    val originalTitle: String,
+    val genreIds: List<Int>,
+    val backdropPath: String?,
+    val isAdult: Boolean,
+    val overview: String,
+    val releaseDate: LocalDate?,
+) {
+    companion object {
+        private const val DATE_FORMAT = "yyyy-MM-dd"
+
+        fun parseDate(dateString: String?): LocalDate? {
+            if (dateString.isNullOrBlank()) {
+                return null
+            }
+            return try {
+                LocalDate.parse(dateString, DateTimeFormatter.ofPattern(DATE_FORMAT))
+            } catch (e: DateTimeParseException) {
+                println("Error parsing date: $dateString")
+                null
+            }
+        }
+    }
+}
