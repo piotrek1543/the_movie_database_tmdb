@@ -31,7 +31,7 @@ import com.example.tmdb.MoviesViewModel
 import com.example.tmdb.ui.theme.TMDBTheme
 import com.example.tmdb.data.Constants
 import com.example.tmdb.data.api.model.MovieResult
-import com.example.tmdb.domain.model.NowPlayingMovie
+import com.example.tmdb.domain.model.Movie
 
 @Composable
 fun HomeScreen(
@@ -87,7 +87,7 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
  */
 @Composable
 fun ResultsScreen(
-    results: List<NowPlayingMovie>,
+    results: List<Movie>,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {

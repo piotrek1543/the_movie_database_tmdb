@@ -2,7 +2,7 @@ package com.example.tmdb
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.domain.model.NowPlayingMovie
+import com.example.tmdb.domain.model.Movie
 import com.example.tmdb.domain.usecase.GetNowPlayingMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,7 +61,7 @@ class MoviesViewModel @Inject constructor(
      * UI state for the Movies screen.
      */
     sealed interface MoviesUiState {
-        data class Success(val movies: List<NowPlayingMovie>) : MoviesUiState
+        data class Success(val movies: List<Movie>) : MoviesUiState
         data class Error(val message: String) : MoviesUiState
         data object Loading : MoviesUiState
     }
