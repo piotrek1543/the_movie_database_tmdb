@@ -4,7 +4,7 @@ import com.example.tmdb.BuildConfig
 import com.example.tmdb.data.api.MovieApiService
 import com.example.tmdb.data.api.model.NowPlayingMovieResponse
 import com.example.tmdb.data.mapper.mapToDomain
-import com.example.tmdb.domain.model.NowPlayingMovie
+import com.example.tmdb.domain.model.Movie
 import com.example.tmdb.domain.repository.MoviesRepository
 import retrofit2.Response
 import timber.log.Timber
@@ -14,7 +14,7 @@ class NetworkMoviesRepository @Inject constructor(
     private val moviesApiService: MovieApiService,
 ) : MoviesRepository {
 
-    override suspend fun getMovies(): List<NowPlayingMovie> {
+    override suspend fun getNowPlayingMovies(): List<Movie> {
         // 1. Handle API call errors and empty responses gracefully.
         val response: Response<NowPlayingMovieResponse> = try {
             moviesApiService.getNowPlayingMovies(BuildConfig.API_KEY)

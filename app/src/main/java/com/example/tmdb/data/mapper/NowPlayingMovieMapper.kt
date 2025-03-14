@@ -1,10 +1,10 @@
 package com.example.tmdb.data.mapper
 
 import com.example.tmdb.data.api.model.MovieResult
-import com.example.tmdb.domain.model.NowPlayingMovie
+import com.example.tmdb.domain.model.Movie
 
 
-fun MovieResult.mapToDomain(): NowPlayingMovie = NowPlayingMovie(
+fun MovieResult.mapToDomain(): Movie = Movie(
     voteCount = voteCount,
     id = id,
     hasVideo = video,
@@ -18,5 +18,5 @@ fun MovieResult.mapToDomain(): NowPlayingMovie = NowPlayingMovie(
     backdropPath = backdropPath,
     isAdult = adult,
     overview = overview,
-    releaseDate = NowPlayingMovie.parseDate(releaseDate),
+    releaseDate = Movie.parseDate(releaseDate),
 )
