@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,10 +22,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tmdb.ui.theme.TMDBTheme
 import androidx.compose.material3.Surface
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tmdb.ui.screens.HomeScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val moviesViewModel: MoviesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,25 +39,24 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
 
-@Composable
-private fun MoviesApp() {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { MoviesTopAppBar(scrollBehavior = scrollBehavior) }
-    ) {
-        Surface(
-            modifier = Modifier.fillMaxSize()
+
+    @Composable
+    private fun MoviesApp() {
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = { MoviesTopAppBar(scrollBehavior = scrollBehavior) }
         ) {
-            val moviesViewModel: MoviesViewModel =
-                viewModel(factory = MoviesViewModel.Factory)
-            HomeScreen(
-                uiState = moviesViewModel.moviesUiState,
-                retryAction = moviesViewModel::getMovies,
-                contentPadding = it
-            )
+            Surface(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                HomeScreen(
+                    uiState = moviesViewModel.moviesUiState,
+                    retryAction = moviesViewModel::getMovies,
+                    contentPadding = it
+                )
+            }
         }
     }
 }

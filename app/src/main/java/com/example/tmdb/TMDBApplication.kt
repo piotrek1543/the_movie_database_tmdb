@@ -7,20 +7,18 @@ import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import coil.request.CachePolicy
 import coil.util.DebugLogger
-import com.example.tmdb.data.AppContainer
-import com.example.tmdb.data.DefaultAppContainer
+
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class TMDBApplication : Application(), ImageLoaderFactory {
-
-    lateinit var container: AppContainer
 
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        container = DefaultAppContainer()
     }
 
     override fun newImageLoader(): ImageLoader {

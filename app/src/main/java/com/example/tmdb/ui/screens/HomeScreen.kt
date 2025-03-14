@@ -26,25 +26,25 @@ import androidx.compose.ui.unit.dp
 import com.example.tmdb.R
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.tmdb.MoviesViewModel
 import com.example.tmdb.ui.theme.TMDBTheme
-import com.example.tmdb.MoviesUiState
 import com.example.tmdb.data.Constants
 import com.example.tmdb.data.model.Results
 
 @Composable
 fun HomeScreen(
-    uiState: MoviesUiState,
+    uiState: MoviesViewModel.MoviesUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     when (uiState) {
-        is MoviesUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is MoviesUiState.Success -> ResultsScreen(
+        is MoviesViewModel.MoviesUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+        is MoviesViewModel.MoviesUiState.Success -> ResultsScreen(
             uiState.results, contentPadding = contentPadding, modifier = modifier.fillMaxWidth()
         )
 
-        is MoviesUiState.Error -> ErrorScreen(retryAction, modifier = modifier.fillMaxSize())
+        is MoviesViewModel.MoviesUiState.Error -> ErrorScreen(retryAction, modifier = modifier.fillMaxSize())
     }
 }
 

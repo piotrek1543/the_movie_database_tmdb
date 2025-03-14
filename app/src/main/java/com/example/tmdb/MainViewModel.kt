@@ -4,27 +4,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import com.example.tmdb.data.MoviesRepository
 import com.example.tmdb.data.model.Results
+import com.example.tmdb.data.repository.MoviesRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
 
-/**
- * UI state for the Home screen
- */
-sealed interface MoviesUiState {
-    data class Success(val results: List<Results>) : MoviesUiState
-    data object Error : MoviesUiState
-    data object Loading : MoviesUiState
-}
-
-class MoviesViewModel(private val repository: MoviesRepository) : ViewModel() {
+@HiltViewModel
+class MoviesViewModel @Inject constructor(
+    private val repository: MoviesRepository,
+) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
     var moviesUiState: MoviesUiState by mutableStateOf(MoviesUiState.Loading)
         private set
@@ -57,15 +49,11 @@ class MoviesViewModel(private val repository: MoviesRepository) : ViewModel() {
     }
 
     /**
-     * Factory for [MoviesViewModel] that takes [MoviesRepository] as a dependency
+     * UI state for the Home screen
      */
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = (this[APPLICATION_KEY] as TMDBApplication)
-                val moviesRepository = application.container.moviesRepository
-                MoviesViewModel(repository = moviesRepository)
-            }
-        }
+    sealed interface MoviesUiState {
+        data class Success(val results: List<Results>) : MoviesUiState
+        data object Error : MoviesUiState
+        data object Loading : MoviesUiState
     }
 }
