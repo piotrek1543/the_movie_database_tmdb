@@ -1,4 +1,4 @@
-package com.example.tmdb.data.model
+package com.example.tmdb.data.api.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

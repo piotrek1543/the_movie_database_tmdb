@@ -1,13 +1,14 @@
 package com.example.tmdb
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdb.data.model.Results
-import com.example.tmdb.data.repository.MoviesRepository
+import com.example.tmdb.domain.model.NowPlayingMovie
+import com.example.tmdb.domain.usecase.GetNowPlayingMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -15,45 +16,53 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
-    private val repository: MoviesRepository,
+    private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
 ) : ViewModel() {
-    /** The mutable State that stores the status of the most recent request */
-    var moviesUiState: MoviesUiState by mutableStateOf(MoviesUiState.Loading)
-        private set
 
     /**
-     * Call getMovies() on init so we can display status immediately.
+     * Private mutable state flow to hold the UI state of movies.
+     */
+    private val _moviesUiState = MutableStateFlow<MoviesUiState>(MoviesUiState.Loading)
+
+    /**
+     * Public immutable state flow to expose the UI state to the UI.
+     */
+    val moviesUiState: StateFlow<MoviesUiState> = _moviesUiState.asStateFlow()
+
+    /**
+     * Initialize the view model by fetching movies immediately.
      */
     init {
-        getMovies()
+        fetchMovies()
     }
 
     /**
-     * Gets movies information from the Movies API Retrofit service and updates the
-     * [Results] [List] [MutableList].
+     * Fetches movies information from the Movies API and updates the UI state.
      */
-    fun getMovies() {
+    fun fetchMovies() {
         viewModelScope.launch {
-            moviesUiState = MoviesUiState.Loading
-            moviesUiState = try {
-                val listResult = repository.getMovies()
-                MoviesUiState.Success(
-                    listResult.results ?: emptyList()
-                )
-            } catch (e: IOException) {
-                MoviesUiState.Error
-            } catch (e: HttpException) {
-                MoviesUiState.Error
+            _moviesUiState.update { MoviesUiState.Loading }
+            _moviesUiState.update {
+                try {
+                    val movies = getNowPlayingMoviesUseCase()
+                    MoviesUiState.Success(movies)
+                } catch (e: IOException) {
+                    MoviesUiState.Error(e.message ?: "Network error")
+                } catch (e: HttpException) {
+                    MoviesUiState.Error(e.message ?: "HTTP error")
+                } catch (e: Exception) {
+                    MoviesUiState.Error(e.message ?: "Unknown error")
+                }
             }
         }
     }
 
     /**
-     * UI state for the Home screen
+     * UI state for the Movies screen.
      */
     sealed interface MoviesUiState {
-        data class Success(val results: List<Results>) : MoviesUiState
-        data object Error : MoviesUiState
+        data class Success(val movies: List<NowPlayingMovie>) : MoviesUiState
+        data class Error(val message: String) : MoviesUiState
         data object Loading : MoviesUiState
     }
 }

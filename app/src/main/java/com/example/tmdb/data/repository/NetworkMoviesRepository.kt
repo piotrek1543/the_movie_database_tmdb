@@ -2,15 +2,17 @@ package com.example.tmdb.data.repository
 
 import com.example.tmdb.BuildConfig
 import com.example.tmdb.data.api.MoviesApiService
-import com.example.tmdb.data.model.MovieResponse
+import com.example.tmdb.data.mapper.mapToDomain
+import com.example.tmdb.domain.model.NowPlayingMovie
+import com.example.tmdb.domain.repository.MoviesRepository
 import javax.inject.Inject
 
-/**
- * Network Implementation of Repository that fetch movies from Api.
- */
 class NetworkMoviesRepository @Inject constructor(
-    private val moviesApiService: MoviesApiService
+    private val moviesApiService: MoviesApiService,
 ) : MoviesRepository {
-    /** Fetches Movies from Api*/
-    override suspend fun getMovies(): MovieResponse = moviesApiService.getMovies(BuildConfig.API_KEY)
+
+    override suspend fun getMovies(): List<NowPlayingMovie> =
+        moviesApiService.getMovies(BuildConfig.API_KEY)
+            .results?.map { it.mapToDomain() } ?: emptyList()
+
 }

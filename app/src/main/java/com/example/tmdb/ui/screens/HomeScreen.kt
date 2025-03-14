@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,19 +30,20 @@ import coil.request.ImageRequest
 import com.example.tmdb.MoviesViewModel
 import com.example.tmdb.ui.theme.TMDBTheme
 import com.example.tmdb.data.Constants
-import com.example.tmdb.data.model.Results
+import com.example.tmdb.data.api.model.Results
+import com.example.tmdb.domain.model.NowPlayingMovie
 
 @Composable
 fun HomeScreen(
-    uiState: MoviesViewModel.MoviesUiState,
+    uiState: State<MoviesViewModel.MoviesUiState>,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    when (uiState) {
+    when (val moviesUiState = uiState.value) {
         is MoviesViewModel.MoviesUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is MoviesViewModel.MoviesUiState.Success -> ResultsScreen(
-            uiState.results, contentPadding = contentPadding, modifier = modifier.fillMaxWidth()
+            moviesUiState.movies, contentPadding = contentPadding, modifier = modifier.fillMaxWidth()
         )
 
         is MoviesViewModel.MoviesUiState.Error -> ErrorScreen(retryAction, modifier = modifier.fillMaxSize())
@@ -85,7 +87,7 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
  */
 @Composable
 fun ResultsScreen(
-    results: List<Results>,
+    results: List<NowPlayingMovie>,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {

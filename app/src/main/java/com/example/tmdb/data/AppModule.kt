@@ -1,7 +1,7 @@
 package com.example.tmdb.data
 
 import com.example.tmdb.data.api.MoviesApiService
-import com.example.tmdb.data.repository.MoviesRepository
+import com.example.tmdb.domain.repository.MoviesRepository
 import com.example.tmdb.data.repository.NetworkMoviesRepository
 import dagger.Module
 import dagger.Provides
