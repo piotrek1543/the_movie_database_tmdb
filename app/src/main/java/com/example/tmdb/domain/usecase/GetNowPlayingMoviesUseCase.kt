@@ -4,7 +4,7 @@ import com.example.tmdb.domain.model.Movie
 import com.example.tmdb.domain.repository.MoviesRepository
 import com.example.tmdb.util.Result
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.channelFlow
 import javax.inject.Inject
 
 class GetNowPlayingMoviesUseCase @Inject constructor(private val moviesRepository: MoviesRepository) {
@@ -17,13 +17,13 @@ class GetNowPlayingMoviesUseCase @Inject constructor(private val moviesRepositor
      *
      * @return A [Flow] emitting a [Result] containing either a list of [Movie] or an error message.
      */
-    operator fun invoke(): Flow<Result<List<Movie>>> = flow {
-        emit(Result.Loading)
+    operator fun invoke(): Flow<Result<List<Movie>>> = channelFlow {
+        send(Result.Loading)
         try {
             val movies = moviesRepository.getNowPlayingMovies()
-            emit(Result.Success(movies))
+            send(Result.Success(movies))
         } catch (e: Exception) {
-            emit(Result.Error(e))
+            send(Result.Error(e))
         }
     }
 }
