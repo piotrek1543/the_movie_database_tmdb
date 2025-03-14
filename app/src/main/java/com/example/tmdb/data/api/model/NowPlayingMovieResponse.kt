@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class MovieResponse(
+data class NowPlayingMovieResponse(
     val results: List<Results>? = null,
     val page: Int? = null,
     @SerializedName("total_results")
