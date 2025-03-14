@@ -37,7 +37,7 @@ class NetworkMoviesRepository @Inject constructor(
 
         // 4. Check if results is not null or empty.
         val results = nowPlayingMovieResponse.results
-        if (results.isNullOrEmpty()) {
+        if (results.isEmpty()) {
             Timber.w("No movies found in the response")
             return emptyList()
         }
