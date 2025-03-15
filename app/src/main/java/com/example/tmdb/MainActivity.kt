@@ -7,7 +7,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,11 +20,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.tmdb.ui.screens.HomeScreen
 import com.example.tmdb.ui.theme.TMDBTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,36 +39,59 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TMDBTheme {
-                MoviesApp()
-            }
-        }
-    }
-
-
-    @Composable
-    private fun MoviesApp() {
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-        val moviesUiState = moviesViewModel.uiState.collectAsState()
-
-        Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = { MoviesTopAppBar(scrollBehavior = scrollBehavior) }
-        ) {
-            Surface(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                HomeScreen(
-                    uiState = moviesUiState,
-                    retryAction = moviesViewModel::loadNowPlayingMovies,
-                    contentPadding = it
-                )
+                // Use a dedicated composable for the root of the app
+                TMDBApp(moviesViewModel)
             }
         }
     }
 }
 
 @Composable
-fun MoviesTopAppBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier) {
+fun TMDBApp(moviesViewModel: MoviesViewModel) {
+    // Use remember to avoid recomposing each time
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    // Use collectAsStateWithLifecycle for lifecycle awareness
+    val moviesUiState by moviesViewModel.uiState.collectAsStateWithLifecycle()
+
+    TMDBAppContent(moviesUiState, moviesViewModel::loadNowPlayingMovies, scrollBehavior)
+}
+
+@Composable
+fun TMDBAppContent(
+    moviesUiState: MoviesViewModel.MoviesUiState,
+    retryAction: () -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior
+) {
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = { TMDBTopAppBar(scrollBehavior) },
+    ) { innerPadding ->
+        MainContent(innerPadding, moviesUiState, retryAction)
+    }
+}
+
+@Composable
+fun MainContent(
+    innerPadding: PaddingValues,
+    uiState: MoviesViewModel.MoviesUiState,
+    retryAction: () -> Unit
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            HomeScreen(
+                uiState = uiState,
+                retryAction = retryAction,
+            )
+        }
+    }
+}
+
+@Composable
+fun TMDBTopAppBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier) {
     CenterAlignedTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
@@ -76,20 +102,4 @@ fun MoviesTopAppBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier 
         },
         modifier = modifier
     )
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TMDBTheme {
-        Greeting("Android")
-    }
 }
