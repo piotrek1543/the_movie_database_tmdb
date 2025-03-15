@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun MoviesApp() {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-        val moviesUiState = moviesViewModel.moviesUiState.collectAsState()
+        val moviesUiState = moviesViewModel.uiState.collectAsState()
 
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

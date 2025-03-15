@@ -8,7 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -24,12 +25,12 @@ class MoviesViewModel @Inject constructor(
     /**
      * Private mutable state flow to hold the UI state of movies.
      */
-    private val _moviesUiState = MutableStateFlow<MoviesUiState>(MoviesUiState.Loading)
+    private val _uiState = MutableStateFlow<MoviesUiState>(MoviesUiState.Loading)
 
     /**
      * Public immutable state flow to expose the UI state to the UI.
      */
-    val moviesUiState: StateFlow<MoviesUiState> = _moviesUiState.asStateFlow()
+    val uiState: StateFlow<MoviesUiState> = _uiState.asStateFlow()
 
     /**
      * Initialize the view model by fetching movies immediately.
@@ -43,27 +44,41 @@ class MoviesViewModel @Inject constructor(
      */
     fun loadNowPlayingMovies() {
         viewModelScope.launch {
-
-            getNowPlayingMoviesUseCase().collectLatest { result ->
-                when (result) {
-                    is Result.Loading -> {
-                        _moviesUiState.update { MoviesUiState.Loading }
-                    }
-                    is Result.Success -> {
-                        _moviesUiState.update { MoviesUiState.Success(result.data) }
-                    }
-                    is Result.Error -> {
-                        val errorMessage = when (result.throwable) {
-                            is IOException -> "Failed to connect to the network. Please check your connection."
-                            is HttpException -> "Failed to fetch data from the server. HTTP error ${result.throwable.code()}"
-                            else -> "An unexpected error occurred. Please try again later."
+            getNowPlayingMoviesUseCase()
+                .onStart {
+                    // Emit loading state at the beginning
+                    _uiState.update { MoviesUiState.Loading }
+                }
+                .catch { throwable ->
+                    // Handle errors that occur during the flow
+                    val errorMessage = getErrorMessage(throwable)
+                    _uiState.update { MoviesUiState.Error(errorMessage) }
+                }
+                .collect { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            _uiState.update { MoviesUiState.Success(result.data) }
                         }
-                        _moviesUiState.update { MoviesUiState.Error(errorMessage) }
+                        // We don't need to handle Result.Loading because we do that with onStart
+                        else -> {
+                            // This case is not necessary in this example
+                        }
                     }
                 }
-            }
         }
     }
+
+    /**
+     * Helper function to determine the appropriate error message based on the exception type.
+     */
+    private fun getErrorMessage(throwable: Throwable): String {
+        return when (throwable) {
+            is IOException -> "Failed to connect to the network. Please check your connection."
+            is HttpException -> "Failed to fetch data from the server. HTTP error ${throwable.code()}"
+            else -> "An unexpected error occurred. Please try again later."
+        }
+    }
+
     /**
      * UI state for the Movies screen.
      */
