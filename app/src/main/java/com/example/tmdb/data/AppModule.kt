@@ -1,6 +1,7 @@
 package com.example.tmdb.data
 
 import com.example.tmdb.BuildConfig
+import com.example.tmdb.data.api.LocalDateAdapter
 import com.example.tmdb.data.api.MovieApiService
 import com.example.tmdb.data.api.TmdbApi
 import com.example.tmdb.data.mapper.MovieResultToMovieMapper

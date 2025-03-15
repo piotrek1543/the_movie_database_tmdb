@@ -1,4 +1,4 @@
-package com.example.tmdb.data
+package com.example.tmdb.data.api
 
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
