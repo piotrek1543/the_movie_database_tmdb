@@ -2,17 +2,20 @@ package com.example.tmdb.data
 
 import com.example.tmdb.BuildConfig
 import com.example.tmdb.data.api.MovieApiService
-import com.example.tmdb.domain.repository.MoviesRepository
 import com.example.tmdb.data.repository.NetworkMoviesRepository
+import com.example.tmdb.domain.repository.MoviesRepository
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDate
+import javax.inject.Singleton
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -47,8 +50,13 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        val gson = GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
+            .create()
+
         return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .baseUrl(Constants.BASE_URL)
             .build()
