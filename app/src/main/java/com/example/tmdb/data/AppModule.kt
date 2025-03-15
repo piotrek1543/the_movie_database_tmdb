@@ -2,6 +2,7 @@ package com.example.tmdb.data
 
 import com.example.tmdb.BuildConfig
 import com.example.tmdb.data.api.MovieApiService
+import com.example.tmdb.data.mapper.MovieResultToMovieMapper
 import com.example.tmdb.data.repository.NetworkMoviesRepository
 import com.example.tmdb.domain.repository.MoviesRepository
 import com.google.gson.GsonBuilder
@@ -81,7 +82,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideMoviesRepository(movieApiService: MovieApiService): MoviesRepository {
-        return NetworkMoviesRepository(movieApiService)
+        val mapper = MovieResultToMovieMapper()
+        return NetworkMoviesRepository(movieApiService, mapper)
     }
 }
 

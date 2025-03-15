@@ -3,7 +3,7 @@ package com.example.tmdb.data.repository
 import com.example.tmdb.BuildConfig
 import com.example.tmdb.data.api.MovieApiService
 import com.example.tmdb.data.api.model.NowPlayingMovieResponse
-import com.example.tmdb.data.mapper.mapToDomain
+import com.example.tmdb.data.mapper.MovieResultToMovieMapper
 import com.example.tmdb.domain.model.Movie
 import com.example.tmdb.domain.repository.MoviesRepository
 import retrofit2.Response
@@ -12,6 +12,7 @@ import javax.inject.Inject
 
 class NetworkMoviesRepository @Inject constructor(
     private val moviesApiService: MovieApiService,
+    private val mapper: MovieResultToMovieMapper,
 ) : MoviesRepository {
 
     override suspend fun getNowPlayingMovies(): List<Movie> {
@@ -43,6 +44,6 @@ class NetworkMoviesRepository @Inject constructor(
         }
 
         // 5. Make the mapping in a val.
-        return results.map { it.mapToDomain() }
+        return results.map { mapper.fromRemote(it) }
     }
 }
