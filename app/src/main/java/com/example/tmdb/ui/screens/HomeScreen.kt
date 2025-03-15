@@ -17,7 +17,7 @@ fun HomeScreen(
 ) {
     when (uiState) {
         is MoviesViewModel.MoviesUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is MoviesViewModel.MoviesUiState.Success -> ResultsScreen(
+        is MoviesViewModel.MoviesUiState.Success -> MovieGridScreen(
             uiState.movies,
             contentPadding = contentPadding,
             modifier = modifier.fillMaxWidth()
