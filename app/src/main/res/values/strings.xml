@@ -13,4 +13,6 @@
     <string name="description_vote_average">Vote average</string>
     <string name="description_vote_count">Vote count</string>
     <string name="connection_error_content_description">Connection error image</string>
+    <string name="description_movie_picture">Movie picture</string>
+    <string name="description_no_movie_picture">No movie picture</string>
 </resources>

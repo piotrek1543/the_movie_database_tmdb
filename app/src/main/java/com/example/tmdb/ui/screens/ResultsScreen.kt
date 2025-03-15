@@ -28,7 +28,7 @@ fun ResultsScreen(
         contentPadding = contentPadding,
     ) {
         items(items = results, key = { result -> result.id }) { result ->
-            MovieImage(result.posterPath)
+            MoviePicture(result.posterPath)
         }
     }
 }
