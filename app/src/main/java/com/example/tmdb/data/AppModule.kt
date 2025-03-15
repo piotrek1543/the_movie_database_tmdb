@@ -2,6 +2,7 @@ package com.example.tmdb.data
 
 import com.example.tmdb.BuildConfig
 import com.example.tmdb.data.api.MovieApiService
+import com.example.tmdb.data.api.TmdbApi
 import com.example.tmdb.data.mapper.MovieResultToMovieMapper
 import com.example.tmdb.data.repository.NetworkMoviesRepository
 import com.example.tmdb.domain.repository.MoviesRepository
@@ -59,7 +60,7 @@ object AppModule {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(TmdbApi.BASE_URL)
             .build()
     }
 

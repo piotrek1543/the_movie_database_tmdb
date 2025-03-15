@@ -1,6 +1,6 @@
 package com.example.tmdb.data.repository
 
-import com.example.tmdb.BuildConfig
+import com.example.tmdb.data.api.TmdbApi
 import com.example.tmdb.data.api.MovieApiService
 import com.example.tmdb.data.api.model.NowPlayingMovieResponse
 import com.example.tmdb.data.mapper.MovieResultToMovieMapper
@@ -18,7 +18,7 @@ class NetworkMoviesRepository @Inject constructor(
     override suspend fun getNowPlayingMovies(): List<Movie> {
         // 1. Handle API call errors and empty responses gracefully.
         val response: Response<NowPlayingMovieResponse> = try {
-            moviesApiService.getNowPlayingMovies(BuildConfig.API_KEY)
+            moviesApiService.getNowPlayingMovies(TmdbApi.API_KEY)
         } catch (e: Exception) {
             Timber.e(e, "Error fetching now playing movies")
             return emptyList()

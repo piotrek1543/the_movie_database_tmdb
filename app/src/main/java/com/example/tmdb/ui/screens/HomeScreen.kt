@@ -29,7 +29,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.tmdb.MoviesViewModel
 import com.example.tmdb.ui.theme.TMDBTheme
-import com.example.tmdb.data.Constants
+import com.example.tmdb.data.api.TmdbApi
 import com.example.tmdb.data.api.model.MovieResult
 import com.example.tmdb.domain.model.Movie
 
@@ -156,7 +156,7 @@ private fun Description(stringResource: String, title: String?) {
 
 @Composable
 private fun MovieImage(imagePath: String? = null) {
-    val fullPath = Constants.IMAGE_URL + imagePath
+    val fullPath = TmdbApi.IMAGE_BASE_URL + imagePath
     AsyncImage(
         model = ImageRequest.Builder(context = LocalContext.current)
             .data(fullPath)
