@@ -12,4 +12,5 @@
     <string name="description_title">Title</string>
     <string name="description_vote_average">Vote average</string>
     <string name="description_vote_count">Vote count</string>
+    <string name="connection_error_content_description">Connection error image</string>
 </resources>
