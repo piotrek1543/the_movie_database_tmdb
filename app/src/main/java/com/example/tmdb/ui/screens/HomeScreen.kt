@@ -127,7 +127,7 @@ private fun MovieDetailsScreen(
             )
             Description(
                 stringResource(R.string.description_release_date),
-                result.releaseDate,
+                result.releaseDate.toString(),
             )
             Description(
                 stringResource(R.string.description_original_language),
