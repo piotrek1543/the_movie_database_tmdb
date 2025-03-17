@@ -86,7 +86,9 @@ dependencies {
     implementation(libs.androidx.fragment.compose)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.lifecycle.viewmodel)
-    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.appcompat)
 
     implementation(libs.dagger.hilt)
