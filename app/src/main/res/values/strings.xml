@@ -3,7 +3,6 @@
     <string name="loading_failed">Failed to load</string>
     <string name="retry">Retry</string>
     <string name="loading">Loading</string>
-    <string name="description_backdrop_image">Backdrop image</string>
     <string name="description_original_language">Original language</string>
     <string name="description_original_title">Original title</string>
     <string name="description_overview">Overview</string>
