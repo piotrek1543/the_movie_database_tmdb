@@ -2,11 +2,12 @@ package com.example.tmdb.data.mapper
 
 import com.example.tmdb.data.api.model.MovieResult
 import com.example.tmdb.domain.model.Movie
+import javax.inject.Inject
 
 /**
  * Mapper to transform a [MovieResult] (from the remote API) to a [Movie] domain model.
  */
-class MovieResultToMovieMapper : RemoteMapper<MovieResult, Movie> {
+class MovieResultToMovieMapper @Inject constructor() : RemoteMapper<MovieResult, Movie> {
 
     override fun fromRemote(remote: MovieResult): Movie = Movie(
         voteCount = remote.voteCount,

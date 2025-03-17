@@ -1,12 +1,9 @@
-package com.example.tmdb.data
+package com.example.tmdb.di
 
 import com.example.tmdb.BuildConfig
 import com.example.tmdb.data.api.LocalDateAdapter
 import com.example.tmdb.data.api.MovieApiService
 import com.example.tmdb.data.api.TmdbApi
-import com.example.tmdb.data.mapper.MovieResultToMovieMapper
-import com.example.tmdb.data.repository.NetworkMoviesRepository
-import com.example.tmdb.domain.repository.MoviesRepository
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -22,7 +19,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object NetworkModule {
 
     /**
      * Provides an instance of OkHttpClient for network requests.
@@ -74,18 +71,6 @@ object AppModule {
     @Singleton
     fun provideMovieApiService(retrofit: Retrofit): MovieApiService {
         return retrofit.create(MovieApiService::class.java)
-    }
-
-    /**
-     * Provides an instance of the [MoviesRepository] for managing movie data.
-     *
-     * @param movieApiService The MovieApiService instance to use for fetching movie data.
-     */
-    @Provides
-    @Singleton
-    fun provideMoviesRepository(movieApiService: MovieApiService): MoviesRepository {
-        val mapper = MovieResultToMovieMapper()
-        return NetworkMoviesRepository(movieApiService, mapper)
     }
 }
 
