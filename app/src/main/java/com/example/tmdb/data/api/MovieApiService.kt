@@ -1,7 +1,6 @@
 package com.example.tmdb.data.api
 
 import com.example.tmdb.data.api.model.NowPlayingMovieResponse
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
