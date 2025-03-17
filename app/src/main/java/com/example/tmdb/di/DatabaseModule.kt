@@ -19,6 +19,12 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun provideConverters(gson: Gson): Converters {
+        return Converters(gson)
+    }
+
+    @Provides
+    @Singleton
     fun provideMoviesDao(database: MoviesDatabase): MoviesDao {
         return database.moviesDao()
     }
@@ -27,14 +33,12 @@ object DatabaseModule {
     @Singleton
     fun provideMoviesDatabase(
         @ApplicationContext context: Context,
-        converters: Converters // Inject the Converters here
     ): MoviesDatabase {
         return Room.databaseBuilder(
             context,
             MoviesDatabase::class.java,
             "movies_database"
         )
-            .addTypeConverter(converters)
             .build()
     }
 
