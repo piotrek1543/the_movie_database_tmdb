@@ -23,7 +23,7 @@ data class MovieResultEntity(
     @ColumnInfo(name = "genre_ids") val genreIds: String,
     // Additional fields (optional, if you need to track them):
     @ColumnInfo(name = "timestamp") val timestamp: Long = System.currentTimeMillis(),
-    //@ColumnInfo(name = "list_type") val listType: String = "now_playing",
+    @ColumnInfo(name = "list_type") val listType: String = "now_playing",
 )
 
 //Entity for storing a list of now playing movies

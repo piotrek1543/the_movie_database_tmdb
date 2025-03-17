@@ -9,6 +9,7 @@ import com.example.tmdb.data.mapper.MovieResultToMovieEntityMapper
 import com.example.tmdb.data.mapper.MovieResultToMovieMapper
 import com.example.tmdb.domain.model.Movie
 import com.example.tmdb.domain.repository.MoviesRepository
+import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
 class NetworkMoviesRepository @Inject constructor(
@@ -29,11 +30,18 @@ class NetworkMoviesRepository @Inject constructor(
         moviesDao.insertMovieResults(domainMovies.map { movieResultToMovieEntityMapper.toLocal(it) })
         moviesDao.insertNowPlayingMovieResponse(
             NowPlayingMovieResponseEntity(
-            page = nowPlayingMoviesResponse.page,
-            totalPages = nowPlayingMoviesResponse.totalPages,
-            totalResults = nowPlayingMoviesResponse.totalResults)
+                page = nowPlayingMoviesResponse.page,
+                totalPages = nowPlayingMoviesResponse.totalPages,
+                totalResults = nowPlayingMoviesResponse.totalResults
+            )
         )
 
-        return domainMovies
+        return getMoviesFromDatabase() ?: domainMovies
+    }
+
+    suspend fun getMoviesFromDatabase(): List<Movie>? {
+        return moviesDao.getMovieResults()
+            .firstOrNull()
+            ?.map { movieResultToMovieEntityMapper.fromLocal(it) }
     }
 }

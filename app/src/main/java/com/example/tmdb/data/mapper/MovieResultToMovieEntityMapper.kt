@@ -22,7 +22,9 @@ class MovieResultToMovieEntityMapper @Inject constructor() :
         voteAverage = local.voteAverage,
         voteCount = local.voteCount,
         hasVideo = local.hasVideo,
-        genreIds = local.genreIds.split(",").map { it.toInt() },
+        genreIds =
+            if (local.genreIds.isBlank()) emptyList()
+            else local.genreIds.split(",").map { it.toInt() },
     )
 
     override fun toLocal(domain: Movie): MovieResultEntity = MovieResultEntity(
