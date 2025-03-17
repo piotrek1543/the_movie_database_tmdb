@@ -4,18 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdb.domain.model.Movie
 import com.example.tmdb.domain.usecase.GetNowPlayingMoviesUseCase
+import com.example.tmdb.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
-import com.example.tmdb.util.Result
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
@@ -44,27 +43,21 @@ class MoviesViewModel @Inject constructor(
      */
     fun loadNowPlayingMovies() {
         viewModelScope.launch {
-            getNowPlayingMoviesUseCase()
-                .onStart {
-                    // Emit loading state at the beginning
-                    _uiState.update { MoviesUiState.Loading }
-                }
-                .catch { throwable ->
-                    // Handle errors that occur during the flow
-                    val errorMessage = getErrorMessage(throwable)
-                    _uiState.update { MoviesUiState.Error(errorMessage) }
-                }
-                .collect { result ->
-                    when (result) {
-                        is Result.Success -> {
-                            _uiState.update { MoviesUiState.Success(result.data) }
-                        }
-                        // We don't need to handle Result.Loading because we do that with onStart
-                        else -> {
-                            // This case is not necessary in this example
-                        }
+            getNowPlayingMoviesUseCase().collectLatest { result ->
+                when (result) {
+                    is Result.Loading -> {
+                        _uiState.update { MoviesUiState.Loading }
+                    }
+
+                    is Result.Success -> {
+                        _uiState.update { MoviesUiState.Success(result.data) }
+                    }
+
+                    is Result.Error -> {
+                        _uiState.update { MoviesUiState.Error(getErrorMessage(result.throwable)) }
                     }
                 }
+            }
         }
     }
 

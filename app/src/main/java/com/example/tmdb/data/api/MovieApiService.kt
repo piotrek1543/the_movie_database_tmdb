@@ -28,5 +28,5 @@ interface MovieApiService {
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1,
         @Query("region") region: String? = null,
-    ): Response<NowPlayingMovieResponse>
+    ): NowPlayingMovieResponse
 }
