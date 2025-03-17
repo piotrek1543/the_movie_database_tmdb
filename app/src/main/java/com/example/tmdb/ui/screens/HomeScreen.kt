@@ -26,10 +26,17 @@ fun HomeScreen(
     ) {
         when (uiState) {
             is MoviesViewModel.MoviesUiState.Loading -> LoadingScreen()
-            is MoviesViewModel.MoviesUiState.Success -> MovieGridScreen(
-                movies = uiState.movies,
-                modifier = Modifier.fillMaxWidth()
-            )
+            is MoviesViewModel.MoviesUiState.Success ->
+                when {
+                    uiState.movies.isNotEmpty() -> MovieGridScreen(
+                        movies = uiState.movies,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    else -> {
+                        EmptyScreen()
+                    }
+                }
 
             is MoviesViewModel.MoviesUiState.Error -> ErrorScreen(retryAction = retryAction)
         }

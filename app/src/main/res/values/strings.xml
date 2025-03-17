@@ -15,4 +15,5 @@
     <string name="connection_error_content_description">Connection error image</string>
     <string name="description_movie_picture">Movie picture</string>
     <string name="description_no_movie_picture">No movie picture</string>
+    <string name="no_results_found">No results found</string>
 </resources>
