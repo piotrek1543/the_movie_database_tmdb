@@ -3,7 +3,6 @@ package com.example.tmdb.data.mapper
 import com.example.tmdb.data.local.MovieResultEntity
 import com.example.tmdb.domain.model.Movie
 import java.time.Instant
-import java.time.LocalDate
 import javax.inject.Inject
 
 class MovieResultToMovieEntityMapper @Inject constructor() :
@@ -18,7 +17,7 @@ class MovieResultToMovieEntityMapper @Inject constructor() :
         overview = local.overview,
         popularity = local.popularity,
         posterPath = local.posterPath,
-        releaseDate = local.releaseDate?.let { LocalDate.parse(it) },
+        releaseDate = local.releaseDate?.let { Movie.parseDate(it) },
         title = local.title,
         voteAverage = local.voteAverage,
         voteCount = local.voteCount,
@@ -35,7 +34,7 @@ class MovieResultToMovieEntityMapper @Inject constructor() :
         overview = domain.overview,
         popularity = domain.popularity,
         posterPath = domain.posterPath,
-        releaseDate = domain.releaseDate?.let { it.toString() },
+        releaseDate = domain.releaseDate?.let { Movie.formatDate(it) },
         title = domain.title,
         voteAverage = domain.voteAverage,
         voteCount = domain.voteCount,
