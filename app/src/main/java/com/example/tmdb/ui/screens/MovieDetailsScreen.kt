@@ -40,7 +40,7 @@ fun MovieDetailsScreen(
                 R.string.description_vote_average to result.voteAverage.toString(),
                 R.string.description_vote_count to result.voteCount.toString(),
             ).forEach { (stringResId, value) ->
-                if(value != null && value.isNotEmpty()) { // Do not display fields that don't contain data
+                if(!value.isNullOrEmpty()) { // Do not display fields that don't contain data
                     Description(
                         title = stringResource(id = stringResId), //pass the id of the string
                         value = value,
