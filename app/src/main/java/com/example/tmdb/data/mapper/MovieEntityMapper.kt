@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import javax.inject.Inject
 
-class MovieResultToMovieEntityMapper @Inject constructor() :
+class MovieEntityMapper @Inject constructor() :
     LocalMapper<MovieResultEntity, Movie> {
 
     companion object {

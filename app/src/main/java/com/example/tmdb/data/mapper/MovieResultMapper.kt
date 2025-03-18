@@ -7,7 +7,7 @@ import javax.inject.Inject
 /**
  * Mapper to transform a [MovieResult] (from the remote API) to a [Movie] domain model.
  */
-class MovieResultToMovieMapper @Inject constructor() : RemoteMapper<MovieResult, Movie> {
+class MovieResultMapper @Inject constructor() : RemoteMapper<MovieResult, Movie> {
 
     override fun fromRemote(remote: MovieResult): Movie = Movie(
         voteCount = remote.voteCount,

@@ -5,8 +5,8 @@ import com.example.tmdb.data.api.TmdbApi
 import com.example.tmdb.data.api.model.NowPlayingMovieResponse
 import com.example.tmdb.data.local.MoviesDao
 import com.example.tmdb.data.local.NowPlayingMovieResponseEntity
-import com.example.tmdb.data.mapper.MovieResultToMovieEntityMapper
-import com.example.tmdb.data.mapper.MovieResultToMovieMapper
+import com.example.tmdb.data.mapper.MovieEntityMapper
+import com.example.tmdb.data.mapper.MovieResultMapper
 import com.example.tmdb.domain.model.Movie
 import com.example.tmdb.domain.repository.MoviesRepository
 import kotlinx.coroutines.flow.firstOrNull
@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 class NetworkMoviesRepository @Inject constructor(
     private val moviesApiService: MovieApiService,
-    private val mapper: MovieResultToMovieMapper,
-    private val movieResultToMovieEntityMapper: MovieResultToMovieEntityMapper,
+    private val movieResultMapper: MovieResultMapper,
+    private val movieEntityMapper: MovieEntityMapper,
     private val moviesDao: MoviesDao,
 ) : MoviesRepository {
 
@@ -23,11 +23,11 @@ class NetworkMoviesRepository @Inject constructor(
         val nowPlayingMoviesResponse: NowPlayingMovieResponse =
             moviesApiService.getNowPlayingMovies(TmdbApi.API_KEY)
 
-        val domainMovies = nowPlayingMoviesResponse.results.map { mapper.fromRemote(it) }
+        val domainMovies = nowPlayingMoviesResponse.results.map { movieResultMapper.fromRemote(it) }
 
         moviesDao.clearMovieResults()
         moviesDao.clearNowPlayingMovieResponse()
-        moviesDao.insertMovieResults(domainMovies.map { movieResultToMovieEntityMapper.toLocal(it) })
+        moviesDao.insertMovieResults(domainMovies.map { movieEntityMapper.toLocal(it) })
         moviesDao.insertNowPlayingMovieResponse(
             NowPlayingMovieResponseEntity(
                 page = nowPlayingMoviesResponse.page,
@@ -42,6 +42,6 @@ class NetworkMoviesRepository @Inject constructor(
     suspend fun getMoviesFromDatabase(): List<Movie>? {
         return moviesDao.getMovieResults()
             .firstOrNull()
-            ?.map { movieResultToMovieEntityMapper.fromLocal(it) }
+            ?.map { movieEntityMapper.fromLocal(it) }
     }
 }
