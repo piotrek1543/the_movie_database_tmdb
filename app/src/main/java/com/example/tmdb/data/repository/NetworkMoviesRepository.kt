@@ -25,8 +25,8 @@ class NetworkMoviesRepository @Inject constructor(
 
         val domainMovies = nowPlayingMoviesResponse.results.map { movieResultMapper.fromRemote(it) }
 
-        moviesDao.clearMovieResults()
-        moviesDao.clearNowPlayingMovieResponse()
+        moviesDao.deleteMovieResults()
+        moviesDao.deleteNowPlayingMovieResponse()
         moviesDao.insertMovieResults(domainMovies.map { movieEntityMapper.toLocal(it) })
         moviesDao.insertNowPlayingMovieResponse(
             NowPlayingMovieResponseEntity(

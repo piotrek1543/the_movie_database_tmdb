@@ -15,7 +15,7 @@ interface MoviesDao {
     fun getMovieResults(listType: String = "now_playing"): Flow<List<MovieResultEntity>>
 
     @Query("DELETE FROM movie_results WHERE list_type = :listType")
-    suspend fun clearMovieResults(listType: String = "now_playing")
+    suspend fun deleteMovieResults(listType: String = "now_playing")
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNowPlayingMovieResponse(nowPlayingMovieResponse: NowPlayingMovieResponseEntity)
@@ -24,5 +24,5 @@ interface MoviesDao {
     fun getNowPlayingMovieResponse(): Flow<NowPlayingMovieResponseEntity?>
 
     @Query("DELETE FROM now_playing_movie_response")
-    suspend fun clearNowPlayingMovieResponse()
+    suspend fun deleteNowPlayingMovieResponse()
 }
