@@ -9,6 +9,9 @@ import com.example.tmdb.data.mapper.MovieEntityMapper
 import com.example.tmdb.data.mapper.MovieResultMapper
 import com.example.tmdb.domain.model.Movie
 import com.example.tmdb.domain.repository.MoviesRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
 
@@ -19,7 +22,7 @@ class NetworkMoviesRepository @Inject constructor(
     private val moviesDatabase: MoviesDatabase,
 ) : MoviesRepository {
 
-    override suspend fun getNowPlayingMovies(): List<Movie> {
+    override suspend fun getNowPlayingMovies(): List<Movie> = withContext(Dispatchers.IO) {
         val languageCode = Locale.getDefault().toLanguageTag()
         val regionCode = Locale.getDefault().country
 
@@ -30,39 +33,46 @@ class NetworkMoviesRepository @Inject constructor(
                 region = regionCode,
             )
         } catch (e: Exception) {
+            Timber.e(e, "Failed to fetch now playing movies.")
             throw GetNowPlayingMoviesException("Failed to fetch now playing movies.", e)
         }
 
         if (nowPlayingMoviesResponse.results.isEmpty()) {
-            return emptyList()
+            Timber.w("Received an empty list of now playing movies.")
+            return@withContext emptyList()
         }
 
-        // 5. Use more descriptive variable names
         val domainMovies: List<Movie> = nowPlayingMoviesResponse.results.map {
             movieResultMapper.fromRemote(it)
         }
 
-        // 6. Use transaction
         moviesDatabase.withTransaction {
             val moviesDao = moviesDatabase.moviesDao()
-            moviesDao.deleteMovieResults()
-            moviesDao.deleteNowPlayingMovieResponse()
+            try {
+                moviesDao.deleteMovieResults()
+                moviesDao.deleteNowPlayingMovieResponse()
 
-            val movieEntities = domainMovies.map { movieEntityMapper.toLocal(it) }
-            moviesDao.insertMovieResults(movieEntities)
-            // 8. Use the class to define the columns.
-            val responseEntity = NowPlayingMovieResponseEntity(
-                page = nowPlayingMoviesResponse.page,
-                totalPages = nowPlayingMoviesResponse.totalPages,
-                totalResults = nowPlayingMoviesResponse.totalResults
-            )
-            moviesDao.insertNowPlayingMovieResponse(responseEntity)
+                val movieEntities = domainMovies.map { movieEntityMapper.toLocal(it) }
+                moviesDao.insertMovieResults(movieEntities)
+
+                val responseEntity = NowPlayingMovieResponseEntity(
+                    page = nowPlayingMoviesResponse.page,
+                    totalPages = nowPlayingMoviesResponse.totalPages,
+                    totalResults = nowPlayingMoviesResponse.totalResults
+                )
+                moviesDao.insertNowPlayingMovieResponse(responseEntity)
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to save data to the local database.")
+                throw SaveToDbException("Failed to save now playing movies.", e)
+            }
         }
 
-        return domainMovies
+        domainMovies
     }
 
-    // 3. Custom exception
     class GetNowPlayingMoviesException(message: String, cause: Throwable) :
+        RuntimeException(message, cause)
+
+    class SaveToDbException(message: String, cause: Throwable) :
         RuntimeException(message, cause)
 }
