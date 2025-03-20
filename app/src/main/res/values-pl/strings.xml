@@ -1,0 +1,23 @@
+<resources>
+    <!-- General UI Elements -->
+    <string name="loading_failed">Nie udało się załadować</string>
+    <string name="retry">Spróbuj ponownie</string>
+    <string name="loading">Ładowanie</string>
+    <string name="no_results_found">Nie znaleziono wyników</string>
+
+    <!-- Movie Description Screen -->
+    <string name="movie_description_original_language">Język oryginału: %1$s</string>
+    <string name="movie_description_original_title">Oryginalny tytuł: %1$s</string>
+    <string name="movie_description_overview">Opis: %1$s</string>
+    <string name="movie_description_popularity">Popularność: %1$f</string>
+    <string name="movie_description_release_date">Data premiery: %1$s</string>
+    <string name="movie_description_title">Tytuł: %1$s</string>
+    <string name="movie_description_vote_average">Średnia ocen: %1$.1f</string>
+    <string name="movie_description_vote_count">Liczba głosów: %1$d</string>
+
+    <!-- Accessibility and Content Descriptions -->
+    <string name="error_screen_image_content_description">Ilustracja błędu połączenia</string>
+    <string name="movie_picture_default_image_content_description">Plakat filmu</string>
+    <string name="movie_picture_no_image_content_description">Brak plakatu dla filmu</string>
+    <string name="empty_screen_image_content_description">Ilustracja pustego ekranu</string>
+</resources>
