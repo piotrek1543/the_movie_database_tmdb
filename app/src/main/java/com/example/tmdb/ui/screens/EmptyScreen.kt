@@ -41,7 +41,7 @@ fun EmptyScreen(
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_broken_image),
-            contentDescription = stringResource(R.string.connection_error_content_description),
+            contentDescription = stringResource(R.string.empty_screen_image_content_description),
             modifier = Modifier.size(128.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))

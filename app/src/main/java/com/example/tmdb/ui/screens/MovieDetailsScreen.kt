@@ -31,14 +31,14 @@ fun MovieDetailsScreen(
         ) {
             // Use a loop to display the descriptions, it's more scalable and readable
             listOf(
-                R.string.description_title to result.title,
-                R.string.description_original_title to result.originalTitle,
-                R.string.description_overview to result.overview,
-                R.string.description_release_date to result.releaseDate?.toString(), //Safe call
-                R.string.description_original_language to result.originalLanguage,
-                R.string.description_popularity to result.popularity.toString(),
-                R.string.description_vote_average to result.voteAverage.toString(),
-                R.string.description_vote_count to result.voteCount.toString(),
+                R.string.movie_description_title to result.title,
+                R.string.movie_description_original_title to result.originalTitle,
+                R.string.movie_description_overview to result.overview,
+                R.string.movie_description_release_date to result.releaseDate?.toString(), //Safe call
+                R.string.movie_description_original_language to result.originalLanguage,
+                R.string.movie_description_popularity to result.popularity.toString(),
+                R.string.movie_description_vote_average to result.voteAverage.toString(),
+                R.string.movie_description_vote_count to result.voteCount.toString(),
             ).forEach { (stringResId, value) ->
                 if(!value.isNullOrEmpty()) { // Do not display fields that don't contain data
                     Description(

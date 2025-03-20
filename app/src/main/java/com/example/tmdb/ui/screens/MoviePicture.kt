@@ -28,7 +28,7 @@ fun MoviePicture(imagePath: String?) {
                 .build(),
             placeholder = painterResource(R.drawable.loading_img),
             error = painterResource(R.drawable.ic_broken_image), //Error is the same as the no image
-            contentDescription = stringResource(R.string.description_no_movie_picture),
+            contentDescription = stringResource(R.string.movie_picture_no_image_content_description),
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()
         )
@@ -50,7 +50,7 @@ fun MoviePicture(imagePath: String?) {
         model = imageRequest,
         error = painterResource(R.drawable.ic_broken_image),
         placeholder = painterResource(R.drawable.loading_img),
-        contentDescription = stringResource(R.string.description_movie_picture),
+        contentDescription = stringResource(R.string.movie_picture_default_image_content_description),
         contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxWidth()
     )

@@ -37,7 +37,7 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_connection_error),
-            contentDescription = stringResource(R.string.connection_error_content_description),
+            contentDescription = stringResource(R.string.error_screen_image_content_description),
             modifier = Modifier.size(128.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
