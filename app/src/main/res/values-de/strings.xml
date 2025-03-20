@@ -1,0 +1,23 @@
+<resources>
+    <!-- General UI Elements -->
+    <string name="loading_failed">Laden fehlgeschlagen</string>
+    <string name="retry">Wiederholen</string>
+    <string name="loading">Lädt…</string>
+    <string name="no_results_found">Keine Ergebnisse gefunden</string>
+
+    <!-- Movie Description Screen -->
+    <string name="movie_description_original_language">Originalsprache: %1$s</string>
+    <string name="movie_description_original_title">Originaltitel: %1$s</string>
+    <string name="movie_description_overview">Übersicht: %1$s</string>
+    <string name="movie_description_popularity">Beliebtheit: %1$f</string>
+    <string name="movie_description_release_date">Erscheinungsdatum: %1$s</string>
+    <string name="movie_description_title">Titel: %1$s</string>
+    <string name="movie_description_vote_average">Durchschnittliche Bewertung: %1$.1f</string>
+    <string name="movie_description_vote_count">Anzahl der Bewertungen: %1$d</string>
+
+    <!-- Accessibility and Content Descriptions -->
+    <string name="error_screen_image_content_description">Illustration eines Verbindungsfehlers</string>
+    <string name="movie_picture_default_image_content_description">Filmplakat</string>
+    <string name="movie_picture_no_image_content_description">Kein Filmplakat verfügbar</string>
+    <string name="empty_screen_image_content_description">Illustration eines leeren Zustands</string>
+</resources>
